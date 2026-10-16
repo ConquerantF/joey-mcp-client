@@ -4,7 +4,6 @@ import java.io.FileInputStream
 plugins {
     id("com.android.application")
     id("kotlin-android")
-    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
 }
 
@@ -41,7 +40,6 @@ android {
     productFlavors {
         create("pro") {
             dimension = "tier"
-            // Uses the default applicationId (com.kaiserapps.joey) and name.
         }
         create("free") {
             dimension = "tier"
@@ -50,25 +48,24 @@ android {
         }
     }
 
-signingConfigs {
-    create("release") {
-        keyAlias = keystoreProperties.getProperty("keyAlias")
-        keyPassword = keystoreProperties.getProperty("keyPassword")
-        storeFile = keystoreProperties.getProperty("storeFile")?.let { file(it) }
-        storePassword = keystoreProperties.getProperty("storePassword")
-    }
-}
-    }
-
-   buildTypes {
-    release {
-        signingConfig = if (keystorePropertiesFile.exists()) {
-            signingConfigs.getByName("release")
-        } else {
-            signingConfigs.getByName("debug")
+    signingConfigs {
+        create("release") {
+            keyAlias = keystoreProperties.getProperty("keyAlias")
+            keyPassword = keystoreProperties.getProperty("keyPassword")
+            storeFile = keystoreProperties.getProperty("storeFile")?.let { file(it) }
+            storePassword = keystoreProperties.getProperty("storePassword")
         }
     }
-}
+
+    buildTypes {
+        release {
+            signingConfig = if (keystorePropertiesFile.exists()) {
+                signingConfigs.getByName("release")
+            } else {
+                signingConfigs.getByName("debug")
+            }
+        }
+    }
 }
 
 flutter {
